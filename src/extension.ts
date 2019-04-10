@@ -13,15 +13,28 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
+	let disposable = vscode.commands.registerCommand('extension.textFolding', texFolding);
 
 	context.subscriptions.push(disposable);
 }
 
+function texFolding() {
+	let editor = vscode.window.activeTextEditor;
+	if (editor === undefined) {
+		return;	// tormented by "undefined"
+	}
+
+	if (editor.selection.isEmpty) {
+		vscode.window.showInformationMessage('Select Line');
+		return;
+	}
+
+	let cur_selection = editor.selection;
+	let text = editor.document.getText(cur_selection); //取得されたテキスト
+
+	vscode.window.showInformationMessage(text);
+}
+
 // this method is called when your extension is deactivated
 export function deactivate() {}
+//vscode.window.showInformationMessage('Hello World!');
